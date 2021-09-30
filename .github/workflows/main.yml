@@ -3,7 +3,35 @@ name: Validate
 on:
   push:
     branches: [ master ]
+  # todo: pull requests  
 
 jobs:
-  build:
+  # testing
+  test:
     runs-on: ubuntu-latest
+    steps:
+
+    # checkout branch
+    - name: Checkoutout
+      uses: actions/checkout@v2
+      with:
+        repository: mattiku/CodeNummy_GithubActions
+        ref: master
+
+   # install python 3.9
+   - name: setup default python 
+     uses: actions/setup-python@v2
+     with: 
+       python-version: '3.9'
+
+    # install requirements
+    - name: InstallRequirements
+      working-directory: ${{github.workspace}}/python
+      run: pip install -r requirements.txt  
+
+    # execute test
+    - name: RunTest
+      working-directory: ${{github.workspace}}/python
+      run: python -m impl_test.py
+  
+       
